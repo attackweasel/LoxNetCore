@@ -10,8 +10,26 @@ internal class Scanner
 	private int _current = 0;
 	private int _line = 0;
 
-	private readonly Dictionary<string, Token> _keywords
-
+	private readonly Dictionary<string, TokenType> _keywords = new ()
+	{
+		{ "and", AND },
+		{ "class", CLASS },
+		{ "else", ELSE },
+		{ "false", FALSE },
+		{ "for", FOR },
+		{ "fun", FUN },
+		{ "if", IF },
+		{ "nil", NIL },
+		{ "or", OR },
+		{ "print", PRINT },
+		{ "return", RETURN },
+		{ "super", SUPER },
+		{ "this", THIS },
+		{ "true", TRUE },
+		{ "var", VAR },
+		{ "while", WHILE }
+	};
+	
 	internal Scanner(string source, ErrorHandler errorHandler)
 	{
 		_source = source;
@@ -184,7 +202,7 @@ internal class Scanner
 			Advance();
 
 		// Look for a fractional part
-		if (PeekNextChar() == '.' && char.IsDigit(PeekNextChar()))
+		if (PeekNextChar() == '.' && char.IsDigit(PeekCharAfterNext()))
 		{
 			Advance();
 
@@ -200,6 +218,11 @@ internal class Scanner
 		while (IsValidIdentifierCharacter(PeekNextChar()))
 			Advance();
 
-		AddToken(IDENTIFIER);
+		var text = _source[_start.._current];
+
+		if (_keywords.ContainsKey(text))
+			AddToken(_keywords[text]);
+		else
+			AddToken(IDENTIFIER);
 	}
 }

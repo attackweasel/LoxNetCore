@@ -1,8 +1,7 @@
 {
   "profiles": {
     "LoxNetCore": {
-      "commandName": "Project",
-      "commandLineArgs": "Howdy"
+      "commandName": "Project"
     }
   }
 }
