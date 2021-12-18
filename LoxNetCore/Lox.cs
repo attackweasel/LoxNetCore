@@ -1,6 +1,6 @@
 ﻿using LoxNetCore;
 
-internal class Lox
+public class Lox
 	{
 		private ErrorHandler _errorHandler = new ErrorHandler();
 

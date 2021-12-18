@@ -1,13 +1,13 @@
 ﻿using LoxNetCore;
 
-internal class Token
+public class Token
 {
-	internal TokenType Type { init; get; }
-	internal string Lexeme { init; get; }
-	internal object? Literal { init; get; }
-	internal int Line { init; get; }
+	public TokenType Type { init; get; }
+	public string Lexeme { init; get; }
+	public object? Literal { init; get; }
+	public int Line { init; get; }
 
-	internal Token(TokenType type, string lexeme, object? literal, int line)
+	public Token(TokenType type, string lexeme, object? literal, int line)
 	{
 		Type = type;
 		Lexeme = lexeme;
