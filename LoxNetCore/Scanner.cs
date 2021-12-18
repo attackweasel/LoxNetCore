@@ -1,7 +1,7 @@
 ﻿using LoxNetCore;
 using static LoxNetCore.TokenType;
 
-internal class Scanner
+public class Scanner
 {
 	private readonly string _source;
 	private readonly ErrorHandler _errorHandler;
@@ -30,13 +30,13 @@ internal class Scanner
 		{ "while", WHILE }
 	};
 	
-	internal Scanner(string source, ErrorHandler errorHandler)
+	public Scanner(string source, ErrorHandler errorHandler)
 	{
 		_source = source;
 		_errorHandler = errorHandler;
 	}
 
-	internal List<Token> ScanTokens()
+	public List<Token> ScanTokens()
 	{
 		while (!IsAtEnd())
 		{
