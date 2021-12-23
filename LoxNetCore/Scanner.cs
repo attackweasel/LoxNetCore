@@ -80,7 +80,13 @@ public class Scanner
 				AddToken(PLUS); 
 				break;
 			case ';': 
-				AddToken(SEMICOLON); 
+				AddToken(SEMICOLON);
+				break;
+			case ':': 
+				AddToken(COLON); 
+				break;
+			case '?': 
+				AddToken(QUESTION); 
 				break;
 			case '*': 
 				AddToken(STAR); 
@@ -99,9 +105,7 @@ public class Scanner
 				break;
 			case '/':
 				if (MatchNextChar('/'))
-				{
 					ScanComment();
-				}
 				else
 					AddToken(SLASH);
 				break;

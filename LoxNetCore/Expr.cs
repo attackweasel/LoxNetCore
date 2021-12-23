@@ -2,6 +2,22 @@ namespace LoxNetCore
 {
 	public abstract class Expr
 	{
+		public class Ternary : Expr
+		{
+			public Expr BoolExpr { get; }
+			public Token Op { get; }
+			public Expr TrueExpr { get; }
+			public Expr FalseExpr { get; }
+
+			public Ternary(Expr boolExpr, Token op, Expr trueExpr, Expr falseExpr)
+			{
+				BoolExpr = boolExpr;
+				Op = op;
+				TrueExpr = trueExpr;
+				FalseExpr = falseExpr;
+			}
+		}
+
 		public class Binary : Expr
 		{
 			public Expr Left { get; }

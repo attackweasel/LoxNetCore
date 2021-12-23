@@ -14,9 +14,9 @@ namespace LoxNetCore
 			_errorHandler = errorHandler;
 		}
 
-		public Expr Parse()
+		public Expr? Parse()
 		{
-			try 
+			try
 			{
 				return Expression();
 			}
@@ -26,7 +26,32 @@ namespace LoxNetCore
 			}
 		}
 
-		private Expr Expression() => Equality();
+		private Expr Expression() => Ternary();
+
+
+		private Expr Ternary()
+		{
+			Expr expr = Equality();
+
+			if (Match(QUESTION))
+			{
+				Token op = new Token(TERNARY, "?:", null, Previous().Line);
+
+				Expr trueExpr = Equality();
+
+				if (Match(COLON))
+				{
+					Expr falseExpr = Equality();
+					expr = new Expr.Ternary(expr, op, trueExpr, falseExpr);
+				}
+				else
+				{
+					throw Error(new Token(TERNARY, "?:", null, Previous().Line), "Ternary expression requires ':'");
+				}
+			}
+
+			return expr;
+		}
 
 		private Expr Equality()
 		{
@@ -55,7 +80,6 @@ namespace LoxNetCore
 
 			return expr;
 		}
-
 
 		private Expr Term()
 		{
