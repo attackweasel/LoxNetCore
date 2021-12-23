@@ -28,6 +28,7 @@ namespace LoxNetCore
 				Expr.Grouping grouping => Evaluate(grouping.Expression),
 				Expr.Unary unary => HandleUnary(unary),
 				Expr.Binary binary => HandleBinary(binary),
+				Expr.Ternary ternary => HandleTernary(ternary),
 				_ => throw new NotImplementedException()
 			};
 		}
@@ -44,6 +45,13 @@ namespace LoxNetCore
 
 				_ => throw new RuntimeException(unary.Op, $"Unary operator {unary.Op.Lexeme} can't be applied to operand {right} with type of {right?.GetType().Name}"),
 			};
+		}
+
+		private object? HandleTernary(Expr.Ternary ternary)
+		{
+			object? boolExpr = Evaluate(ternary.BoolExpr);
+
+			return IsTruthy(boolExpr) ? Evaluate(ternary.TrueExpr) : Evaluate(ternary.FalseExpr);
 		}
 
 		private object? HandleBinary(Expr.Binary binary)
