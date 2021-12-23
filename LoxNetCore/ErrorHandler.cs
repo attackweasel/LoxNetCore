@@ -4,6 +4,8 @@
 	{
 		public bool HadError { get; set; } = false;
 
+		public bool HadRuntimeError { get; set; } = false;
+
 		public void Error(int line, string message) => Report(line, "", message);
 
 		public void Report(int line, string where, string message)
@@ -19,6 +21,14 @@
 				Report(token.Line, "at end", message);
 			else
 				Report(token.Line, $"at '{token.Lexeme}'", message);
+		}
+
+		public void RuntimeError(RuntimeException exception)
+		{
+			Console.Error.WriteLine(exception.Message);
+			Console.Error.WriteLine($"[line {exception.Token.Line}]");
+			
+			HadRuntimeError = true;
 		}
 	}
 }

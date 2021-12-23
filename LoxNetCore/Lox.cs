@@ -2,6 +2,7 @@
 
 public class Lox
 {
+	private static Interpreter _interpreter = new Interpreter();
 	private ErrorHandler _errorHandler = new ErrorHandler();
 
 	public void RunFile(string path)
@@ -9,6 +10,7 @@ public class Lox
 		Run(File.ReadAllText(path));
 
 		if (_errorHandler.HadError) Environment.Exit(65);
+		if (_errorHandler.HadRuntimeError) Environment.Exit(70);
 	}
 
 	public void RunPrompt()
@@ -36,6 +38,6 @@ public class Lox
 		// Stop if there was a syntax error
 		if (_errorHandler.HadError) return;
 
-		Console.WriteLine(AstPrinter.Print(expression));
+		_interpreter.Interpret(expression);
 	}
 }
