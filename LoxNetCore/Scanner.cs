@@ -92,10 +92,10 @@ public class Scanner
 				AddToken(MatchNextChar('=') ? EQUAL_EQUAL : EQUAL);
 				break;
 			case '<':
-				AddToken(MatchNextChar('<') ? LESS_EQUAL : LESS);
+				AddToken(MatchNextChar('=') ? LESS_EQUAL : LESS);
 				break;
 			case '>':
-				AddToken(MatchNextChar('>') ? GREATER_EQUAL : GREATER);
+				AddToken(MatchNextChar('=') ? GREATER_EQUAL : GREATER);
 				break;
 			case '/':
 				if (MatchNextChar('/'))

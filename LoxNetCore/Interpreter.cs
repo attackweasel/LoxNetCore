@@ -42,7 +42,7 @@ namespace LoxNetCore
 
 				BANG => !IsTruthy(right),
 
-				_ => throw new RuntimeException(unary.Op, $"Unary operator {unary.Op.Lexeme} cannot be applied to operand {right} with type of {right?.GetType().Name}"),
+				_ => throw new RuntimeException(unary.Op, $"Unary operator {unary.Op.Lexeme} can't be applied to operand {right} with type of {right?.GetType().Name}"),
 			};
 		}
 
@@ -57,21 +57,31 @@ namespace LoxNetCore
 
 				PLUS when left is double l && right is double r => l + r,
 				PLUS when left is string l && right is string r => l + r,
+				PLUS when left is double l && right is string r => l + r,
+				PLUS when left is string l && right is double r => l + r,
 
+				SLASH when left is double l && right is double r && r == 0 => throw new RuntimeException(binary.Op, "Can't divide by 0"),
 				SLASH when left is double l && right is double r => l / r,
 				
 				STAR when left is double l && right is double r => l * r,
+				STAR when left is string l && right is double r => string.Concat(Enumerable.Repeat(l, (int) r)),
 
 				GREATER when left is double l && right is double r => l > r,
 				GREATER_EQUAL when left is double l && right is double r => l >= r,
 
+				GREATER when left is string l && right is string r => l.CompareTo(r) > 0,
+				GREATER_EQUAL when left is string l && right is string r => l.CompareTo(r) >= 0,
+
 				LESS when left is double l && right is double r => l < r,
 				LESS_EQUAL when left is double l && right is double r => l <= r,
+
+				LESS when left is string l && right is string r => l.CompareTo(r) < 0,
+				LESS_EQUAL when left is string l && right is string r => l.CompareTo(r) <= 0,
 
 				EQUAL_EQUAL => IsEqual(left, right),
 				BANG_EQUAL => !IsEqual(left, right),
 
-				_ => throw new RuntimeException(binary.Op, $"Binary operator {binary.Op.Lexeme} cannot be applied to left operand {left} with type of {left?.GetType().Name} and right operand {right} with type of {right?.GetType().Name}"),
+				_ => throw new RuntimeException(binary.Op, $"Binary operator {binary.Op.Lexeme} can't be applied to left operand {left} with type of {left?.GetType().Name} and right operand {right} with type of {right?.GetType().Name}"),
 			};
 		}
 
