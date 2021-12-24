@@ -89,7 +89,7 @@ namespace LoxNetCore
 				EQUAL_EQUAL => IsEqual(left, right),
 				BANG_EQUAL => !IsEqual(left, right),
 
-				_ => throw new RuntimeException(binary.Op, $"Binary operator {binary.Op.Lexeme} can't be applied to left operand {left} with type of {left?.GetType().Name} and right operand {right} with type of {right?.GetType().Name}"),
+				_ => throw new RuntimeException(binary.Op, $"Binary operator {binary.Op.Lexeme} can't be applied to left operand {Stringify(left)} ({left?.GetType().Name}) and right operand {Stringify(right)} ({right?.GetType().Name})"),
 			};
 		}
 
@@ -110,19 +110,24 @@ namespace LoxNetCore
 
 		private string? Stringify(object? obj)
 		{
-			if (obj is null) return "nil";
-
-			if (obj is double d)
+			switch (obj)
 			{
-				string text = d.ToString();
+				case null:
+					return "nil";
+				case bool b:
+					return b ? "true" : "false";
+				case string s:
+					return $"\"{s}\"";
+				case double d:
+					string text = d.ToString();
 
-				if (text.EndsWith(".0"))
-					text = text[..-2];
+					if (text.EndsWith(".0"))
+						text = text[..-2];
 
-				return text;
+					return text;
+				default:
+					return obj.ToString();
 			}
-
-			return obj.ToString();
 		}
 	}
 }

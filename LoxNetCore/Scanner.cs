@@ -182,7 +182,7 @@ public class Scanner
 	{
 		while (PeekNextChar() != '"' && !IsAtEnd())
 		{
-			if (PeekNextChar() != '\n')
+			if (PeekNextChar() == '\n')
 				_line++;
 			Advance();
 		}
