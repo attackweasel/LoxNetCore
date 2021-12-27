@@ -33,11 +33,11 @@ public class Lox
 		List<Token> tokens = scanner.ScanTokens();
 
 		Parser parser = new Parser(tokens, _errorHandler);
-		Expr expression = parser.Parse();
+		List<Stmt> statements = parser.Parse();
 
 		// Stop if there was a syntax error
 		if (_errorHandler.HadError) return;
 
-		_interpreter.Interpret(expression);
+		_interpreter.Interpret(statements);
 	}
 }

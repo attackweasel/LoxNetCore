@@ -7,18 +7,38 @@ namespace LoxNetCore
 	{
 		private ErrorHandler _errorHandler = new ErrorHandler();
 
-		public void Interpret(Expr expression)
+		public void Interpret(List<Stmt> statements)
 		{
 			try
 			{
-				object? value = Evaluate(expression);
-				Console.WriteLine(Stringify(value));
+				foreach (var statement in statements)
+				{
+					Execute(statement);
+				}
 			}
 			catch (RuntimeException error)
 			{
 				_errorHandler.RuntimeError(error);
 			}
 		}
+
+		private void Execute(Stmt statement)
+		{
+			switch (statement)
+			{
+				case Stmt.Print printExpr:
+					HandlePrint(printExpr);
+					break;
+				case Stmt.Expression expression:
+					HandleExpression(expression);
+					break;
+			}
+		}
+
+		private void HandlePrint(Stmt.Print statement) =>
+			Console.WriteLine(Stringify(Evaluate(statement.Expr)));
+
+		public void HandleExpression(Stmt.Expression expression) => Evaluate(expression.Expr);
 
 		private object? Evaluate(Expr expression)
 		{
@@ -116,8 +136,6 @@ namespace LoxNetCore
 					return "nil";
 				case bool b:
 					return b ? "true" : "false";
-				case string s:
-					return $"\"{s}\"";
 				case double d:
 					string text = d.ToString();
 
