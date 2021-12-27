@@ -14,20 +14,35 @@ namespace LoxNetCore
 			_errorHandler = errorHandler;
 		}
 
-		public Expr? Parse()
+		public List<Stmt> Parse()
 		{
-			try
+			var statements = new List<Stmt>();
+
+			while (!IsAtEnd())
 			{
-				return Expression();
+				statements.Add(Statement());
 			}
-			catch (ParseException ex)
-			{
-				return null;
-			}
+
+			return statements;
+		}
+
+		private Stmt Statement() => Match(PRINT) ? PrintStatement() : ExpressionStatement();
+
+		private Stmt PrintStatement()
+		{
+			Expr value = Expression();
+			Consume(SEMICOLON, "Expect ';' after value.");
+			return new Stmt.Print(value);
+		}
+
+		private Stmt ExpressionStatement()
+		{
+			Expr value = Expression();
+			Consume(SEMICOLON, "Expect ';' after value.");
+			return new Stmt.Expression(value);
 		}
 
 		private Expr Expression() => Ternary();
-
 
 		private Expr Ternary()
 		{
@@ -158,8 +173,6 @@ namespace LoxNetCore
 
 			throw Error(Peek(), message);
 		}
-
-
 
 		private bool Check(TokenType type)
 		{

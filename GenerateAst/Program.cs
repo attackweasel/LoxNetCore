@@ -8,10 +8,17 @@ var outputDir = args[0];
 
 DefineAst(outputDir, "Expr", new List<string>
 {
+	"Ternary	: Expr boolExpr, Token op, Expr trueExpr, Expr falseExpr",
 	"Binary		: Expr left, Token op, Expr right",
 	"Grouping	: Expr expression",
 	"Literal	: object? value",
 	"Unary		: Token op, Expr right"
+});
+
+DefineAst(outputDir, "Stmt", new List<string>
+{
+	"Expression : Expr expression",
+	"Print		: Expr expression"
 });
 
 static async void DefineAst(string outputDir, string baseName, List<string> types)
