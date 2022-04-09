@@ -12,6 +12,18 @@ namespace LoxNetCore
 			}
 		}
 
+		public class Var : Stmt
+		{
+			public Token Name { get; }
+			public Expr? Initializer { get; }
+
+			public Var(Token name, Expr? initializer)
+			{
+				Name = name;
+				Initializer = initializer;
+			}
+		}
+
 		public class Print : Stmt
 		{
 			public Expr Expr { get; }

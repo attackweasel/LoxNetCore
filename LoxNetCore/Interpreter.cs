@@ -1,13 +1,13 @@
-﻿using LoxNetCore;
-using static LoxNetCore.TokenType;
+﻿using static LoxNetCore.TokenType;
 
 namespace LoxNetCore
 {
-	public class Interpreter
+    public class Interpreter
 	{
+		private Env _environment = new Env();
 		private ErrorHandler _errorHandler = new ErrorHandler();
 
-		public void Interpret(List<Stmt> statements)
+		public void Interpret(List<Stmt?> statements)
 		{
 			try
 			{
@@ -22,12 +22,15 @@ namespace LoxNetCore
 			}
 		}
 
-		private void Execute(Stmt statement)
+		private void Execute(Stmt? statement)
 		{
 			switch (statement)
 			{
-				case Stmt.Print printExpr:
-					HandlePrint(printExpr);
+				case Stmt.Print printStmt:
+					HandlePrintStatement(printStmt);
+					break;
+				case Stmt.Var varStmt:
+					HandleVarStatement(varStmt);
 					break;
 				case Stmt.Expression expression:
 					HandleExpression(expression);
@@ -35,8 +38,15 @@ namespace LoxNetCore
 			}
 		}
 
-		private void HandlePrint(Stmt.Print statement) =>
-			Console.WriteLine(Stringify(Evaluate(statement.Expr)));
+		private void HandlePrintStatement(Stmt.Print stmt) =>
+			Console.WriteLine(Stringify(Evaluate(stmt.Expr)));
+
+		private void HandleVarStatement(Stmt.Var stmt)
+        {
+			var value = (stmt.Initializer is null) ? null : Evaluate(stmt.Initializer);
+
+			_environment.Define(stmt.Name.Lexeme, value);
+        }
 
 		public void HandleExpression(Stmt.Expression expression) => Evaluate(expression.Expr);
 
@@ -45,7 +55,8 @@ namespace LoxNetCore
 			return expression switch
 			{
 				Expr.Literal literal => literal.Value,
-				Expr.Grouping grouping => Evaluate(grouping.Expression),
+				Expr.Variable variable => RetrieveVariable(variable.Name),
+				Expr.Grouping grouping => Evaluate(grouping.Expr),
 				Expr.Unary unary => HandleUnary(unary),
 				Expr.Binary binary => HandleBinary(binary),
 				Expr.Ternary ternary => HandleTernary(ternary),
@@ -53,9 +64,11 @@ namespace LoxNetCore
 			};
 		}
 
+		private object? RetrieveVariable(Token name) => _environment.Get(name);
+
 		private object? HandleUnary(Expr.Unary unary)
 		{
-			object? right = Evaluate(unary.Right);
+			var right = Evaluate(unary.Right);
 
 			return unary.Op.Type switch
 			{
@@ -76,8 +89,8 @@ namespace LoxNetCore
 
 		private object? HandleBinary(Expr.Binary binary)
 		{
-			object? left = Evaluate(binary.Left);
-			object? right = Evaluate(binary.Right);
+			var left = Evaluate(binary.Left);
+			var right = Evaluate(binary.Right);
 
 			return binary.Op.Type switch
 			{
