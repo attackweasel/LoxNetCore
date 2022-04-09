@@ -12,12 +12,14 @@ DefineAst(outputDir, "Expr", new List<string>
 	"Binary		: Expr left, Token op, Expr right",
 	"Grouping	: Expr expression",
 	"Literal	: object? value",
+	"Variable	: Token name",
 	"Unary		: Token op, Expr right"
 });
 
 DefineAst(outputDir, "Stmt", new List<string>
 {
 	"Expression : Expr expression",
+	"Var		: Token name, Expr? initializer",
 	"Print		: Expr expression"
 });
 
@@ -55,6 +57,7 @@ static void DefineType(StreamWriter writer, string baseName, string className, s
 	{
 		var typeName = TypeName(field);
 		var fieldName = Capitalize(FieldName(field));
+		if (fieldName == "Expression") fieldName = "Expr";
 
 		writer.WriteLine($"			public {typeName} {fieldName} {{ get; }}");
 	}
@@ -69,6 +72,7 @@ static void DefineType(StreamWriter writer, string baseName, string className, s
 	{
 		var paramName = FieldName(field);
 		var fieldName = Capitalize(FieldName(field));
+		if (fieldName == "Expression") fieldName = "Expr";
 
 		writer.WriteLine($"				{fieldName} = {paramName};");
 	}

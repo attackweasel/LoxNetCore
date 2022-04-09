@@ -30,10 +30,10 @@ public class Lox
 	private void Run(string source)
 	{
 		var scanner = new Scanner(source, _errorHandler);
-		List<Token> tokens = scanner.ScanTokens();
+		var tokens = scanner.ScanTokens();
 
-		Parser parser = new Parser(tokens, _errorHandler);
-		List<Stmt> statements = parser.Parse();
+		var parser = new Parser(tokens, _errorHandler);
+		var statements = parser.Parse();
 
 		// Stop if there was a syntax error
 		if (_errorHandler.HadError) return;

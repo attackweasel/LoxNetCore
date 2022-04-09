@@ -34,11 +34,11 @@ namespace LoxNetCore
 
 		public class Grouping : Expr
 		{
-			public Expr Expression { get; }
+			public Expr Expr { get; }
 
 			public Grouping(Expr expression)
 			{
-				Expression = expression;
+				Expr = expression;
 			}
 		}
 
@@ -49,6 +49,16 @@ namespace LoxNetCore
 			public Literal(object? value)
 			{
 				Value = value;
+			}
+		}
+
+		public class Variable : Expr
+		{
+			public Token Name { get; }
+
+			public Variable(Token name)
+			{
+				Name = name;
 			}
 		}
 

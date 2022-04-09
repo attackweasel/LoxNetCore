@@ -7,7 +7,7 @@ namespace LoxNetCore
 		public static string? Print(Expr expr) => expr switch
 		{
 			Expr.Binary binary => Parenthesize(binary.Op.Lexeme, binary.Left, binary.Right),
-			Expr.Grouping grouping => Parenthesize("group", grouping.Expression),
+			Expr.Grouping grouping => Parenthesize("group", grouping.Expr),
 			Expr.Literal literal => literal.Value is null ? "nil" : literal.Value.ToString(),
 			Expr.Unary unary => Parenthesize(unary.Op.Lexeme, unary.Right),
 			_ => throw new NotImplementedException()

@@ -14,17 +14,43 @@ namespace LoxNetCore
 			_errorHandler = errorHandler;
 		}
 
-		public List<Stmt> Parse()
+		public List<Stmt?> Parse()
 		{
-			var statements = new List<Stmt>();
+			var statements = new List<Stmt?>();
 
 			while (!IsAtEnd())
 			{
-				statements.Add(Statement());
+				statements.Add(Declaration());
 			}
 
 			return statements;
 		}
+
+		private Stmt? Declaration()
+        {
+			try
+            {
+				if (Match(VAR))
+					return VarDeclaration();
+				return Statement();
+            }
+			catch (ParseException)
+            {
+				Synchronize();
+				return null;
+            }
+        }
+
+		private Stmt VarDeclaration()
+        {
+			Token name = Consume(IDENTIFIER, "Expect variable name.");
+
+			Expr? initializer = Match(EQUAL) ? Expression() : null;
+
+			Consume(SEMICOLON, "Expect ';' after variable declaration.");
+
+			return new Stmt.Var(name, initializer);
+        }
 
 		private Stmt Statement() => Match(PRINT) ? PrintStatement() : ExpressionStatement();
 
@@ -143,6 +169,8 @@ namespace LoxNetCore
 			if (Match(NIL)) return new Expr.Literal(null);
 
 			if (Match(NUMBER, STRING)) return new Expr.Literal(Previous().Literal);
+
+			if (Match(IDENTIFIER)) return new Expr.Variable(Previous());
 
 			if (Match(LEFT_PAREN))
 			{
