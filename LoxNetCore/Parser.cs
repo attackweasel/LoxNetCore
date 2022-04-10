@@ -16,7 +16,7 @@ namespace LoxNetCore
 
 		public List<Stmt?> Parse()
 		{
-			var statements = new List<Stmt?>();
+			List<Stmt?> statements = new List<Stmt?>();
 
 			while (!IsAtEnd())
 			{
@@ -68,7 +68,28 @@ namespace LoxNetCore
 			return new Stmt.Expression(value);
 		}
 
-		private Expr Expression() => Ternary();
+		private Expr Expression() => Assignment();
+
+		private Expr Assignment()
+        {
+			Expr expr = Ternary();
+
+			if (Match(EQUAL))
+            {
+				Token equals = Previous();
+				Expr value = Assignment();
+
+				if (expr is Expr.Variable variable)
+                {
+					Token name = variable.Name;
+					return new Expr.Assign(name, value);
+                }
+
+				_errorHandler.Error(equals, "Invalid assignment target.");
+            }
+
+			return expr;
+        }
 
 		private Expr Ternary()
 		{
@@ -184,7 +205,7 @@ namespace LoxNetCore
 
 		private bool Match(params TokenType[] types)
 		{
-			foreach(var type in types)
+			foreach(TokenType type in types)
 			{
 				if (Check(type))
 				{

@@ -2,6 +2,18 @@ namespace LoxNetCore
 {
 	public abstract class Expr
 	{
+		public class Assign : Expr
+		{
+			public Token Name { get; }
+			public Expr Value { get; }
+
+			public Assign(Token name, Expr value)
+			{
+				Name = name;
+				Value = value;
+			}
+		}
+
 		public class Ternary : Expr
 		{
 			public Expr BoolExpr { get; }
