@@ -4,10 +4,11 @@
 	Environment.Exit(64);
 }
 
-var outputDir = args[0];
+string outputDir = args[0];
 
 DefineAst(outputDir, "Expr", new List<string>
 {
+	"Assign		: Token name, Expr value", 
 	"Ternary	: Expr boolExpr, Token op, Expr trueExpr, Expr falseExpr",
 	"Binary		: Expr left, Token op, Expr right",
 	"Grouping	: Expr expression",
@@ -25,7 +26,7 @@ DefineAst(outputDir, "Stmt", new List<string>
 
 static async void DefineAst(string outputDir, string baseName, List<string> types)
 {
-	var path = $"{outputDir}/{baseName}.cs";
+	string path = $"{outputDir}/{baseName}.cs";
 
 	using StreamWriter writer = File.CreateText(path);
 
@@ -34,10 +35,10 @@ static async void DefineAst(string outputDir, string baseName, List<string> type
 	await writer.WriteLineAsync($"	public abstract class {baseName}");
 	await writer.WriteLineAsync("	{");
 
-	foreach (var type in types)
+	foreach (string type in types)
 	{
-		var className = type.Split(':')[0].Trim();
-		var fields = type.Split(':')[1].Trim();
+		string className = type.Split(':')[0].Trim();
+		string fields = type.Split(':')[1].Trim();
 		DefineType(writer, baseName, className, fields);
 	}
 
@@ -47,16 +48,16 @@ static async void DefineAst(string outputDir, string baseName, List<string> type
 
 static void DefineType(StreamWriter writer, string baseName, string className, string fieldList)
 {
-	var fields = fieldList.Split(", ").ToList();
+	List<string> fields = fieldList.Split(", ").ToList();
 
 	writer.WriteLine($"		public class {className} : {baseName}");
 	writer.WriteLine("		{");
 
 	// Properties
-	foreach (var field in fields)
+	foreach (string field in fields)
 	{
-		var typeName = TypeName(field);
-		var fieldName = Capitalize(FieldName(field));
+		string typeName = TypeName(field);
+		string fieldName = Capitalize(FieldName(field));
 		if (fieldName == "Expression") fieldName = "Expr";
 
 		writer.WriteLine($"			public {typeName} {fieldName} {{ get; }}");
@@ -68,10 +69,10 @@ static void DefineType(StreamWriter writer, string baseName, string className, s
 	writer.WriteLine($"			public {className}({fieldList})");
 	writer.WriteLine("			{");
 
-	foreach (var field in fields)
+	foreach (string field in fields)
 	{
-		var paramName = FieldName(field);
-		var fieldName = Capitalize(FieldName(field));
+		string paramName = FieldName(field);
+		string fieldName = Capitalize(FieldName(field));
 		if (fieldName == "Expression") fieldName = "Expr";
 
 		writer.WriteLine($"				{fieldName} = {paramName};");

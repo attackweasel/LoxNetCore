@@ -1,21 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace LoxNetCore
+﻿namespace LoxNetCore
 {
     public class Env
     {
-        private Dictionary<string, object?> values = new();
+        private Dictionary<string, object?> _values = new();
 
         public void Define(string name, object? value) =>
-            values[name] = value;
+            _values[name] = value;
 
-        public object? Get(Token name) => values.ContainsKey(name.Lexeme)
-            ? values[name.Lexeme]
+        public object? Get(Token name) => _values.ContainsKey(name.Lexeme)
+            ? _values[name.Lexeme]
             : throw new RuntimeException(name,
                 $"Undefined variable '{name.Lexeme}'.");
+
+        public void Assign(Token name, object? value)
+        {
+            if (_values.ContainsKey(name.Lexeme))
+            {
+                _values[name.Lexeme] = value;
+                return;
+            }
+
+            throw new RuntimeException(
+                name,
+                $"Undefined variable '{name.Lexeme}'.");
+        }
     }
 }

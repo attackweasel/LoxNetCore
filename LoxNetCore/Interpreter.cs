@@ -11,7 +11,7 @@ namespace LoxNetCore
         {
             try
             {
-                foreach (var statement in statements)
+                foreach (Stmt? statement in statements)
                 {
                     Execute(statement);
                 }
@@ -43,7 +43,7 @@ namespace LoxNetCore
 
         private void HandleVarStatement(Stmt.Var stmt)
         {
-            var value = (stmt.Initializer is null) ? null : Evaluate(stmt.Initializer);
+            object? value = (stmt.Initializer is null) ? null : Evaluate(stmt.Initializer);
 
             _environment.Define(stmt.Name.Lexeme, value);
         }
@@ -60,15 +60,23 @@ namespace LoxNetCore
                 Expr.Unary unary => HandleUnary(unary),
                 Expr.Binary binary => HandleBinary(binary),
                 Expr.Ternary ternary => HandleTernary(ternary),
+                Expr.Assign assignment => HandleAssignment(assignment),
                 _ => throw new NotImplementedException()
             };
+        }
+
+        private object? HandleAssignment(Expr.Assign assignment)
+        {
+            Object? value = Evaluate(assignment.Value);
+            _environment.Assign(assignment.Name, value);
+            return value;
         }
 
         private object? RetrieveVariable(Token name) => _environment.Get(name);
 
         private object? HandleUnary(Expr.Unary unary)
         {
-            var right = Evaluate(unary.Right);
+            object? right = Evaluate(unary.Right);
 
             return unary.Op.Type switch
             {
@@ -89,8 +97,8 @@ namespace LoxNetCore
 
         private object? HandleBinary(Expr.Binary binary)
         {
-            var left = Evaluate(binary.Left);
-            var right = Evaluate(binary.Right);
+            object? left = Evaluate(binary.Left);
+            object? right = Evaluate(binary.Right);
 
             return binary.Op.Type switch
             {
