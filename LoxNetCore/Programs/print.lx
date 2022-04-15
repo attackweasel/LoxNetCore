@@ -4,11 +4,30 @@ print 2 + 1;
 print 1 > 5;
 print "bobb" + 3 + "rt";
 
-var a = 7;
-print a + 8;
-var a = 8;
-print a * a;
+var x = 7;
+print x + 8;
+var y = 8;
+print y * y;
 
-var b = 10;
-print "a * b = " + a * b;
+print "x * y = " + x * y;
+
+var a = "global a";
+var b = "global b";
+var c = "global c";
+{
+	var a = "outer a";
+	var b = "outer b";
+	{
+		var a = "inner a";
+		print a;
+		print b;
+		print c;
+	}
+	print a;
+	print b;
+	print c;
+}
+print a;
+print b;
+print c;
 

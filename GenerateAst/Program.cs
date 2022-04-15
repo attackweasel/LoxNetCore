@@ -21,7 +21,8 @@ DefineAst(outputDir, "Stmt", new List<string>
 {
 	"Expression : Expr expression",
 	"Var		: Token name, Expr? initializer",
-	"Print		: Expr expression"
+	"Print		: Expr expression",
+	"Block		: List<Stmt?> statements"
 });
 
 static async void DefineAst(string outputDir, string baseName, List<string> types)

@@ -34,5 +34,15 @@ namespace LoxNetCore
 			}
 		}
 
+		public class Block : Stmt
+		{
+			public List<Stmt?> Statements { get; }
+
+			public Block(List<Stmt?> statements)
+			{
+				Statements = statements;
+			}
+		}
+
 	}
 }
