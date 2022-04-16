@@ -1,8 +1,7 @@
 {
   "profiles": {
     "LoxNetCore": {
-      "commandName": "Project",
-      "commandLineArgs": "programs/print.lx"
+      "commandName": "Project"
     },
     "WSL": {
       "commandName": "WSL2",

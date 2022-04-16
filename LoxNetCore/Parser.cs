@@ -268,10 +268,9 @@ namespace LoxNetCore
 
 		private void Synchronize()
 		{
-			Advance();
-
 			while(!IsAtEnd())
 			{
+				Advance();
 				if (Previous().Type == SEMICOLON) return;
 			}
 
