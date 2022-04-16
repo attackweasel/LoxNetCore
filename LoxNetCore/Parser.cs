@@ -52,7 +52,12 @@ namespace LoxNetCore
 			return new Stmt.Var(name, initializer);
         }
 
-		private Stmt Statement() => Match(PRINT) ? PrintStatement() : ExpressionStatement();
+		private Stmt Statement()
+		{
+			if (Match(PRINT)) return PrintStatement();
+			if (Match(LEFT_BRACE)) return new Stmt.Block(Block());
+			return ExpressionStatement();
+		}
 
 		private Stmt PrintStatement()
 		{
@@ -60,6 +65,18 @@ namespace LoxNetCore
 			Consume(SEMICOLON, "Expect ';' after value.");
 			return new Stmt.Print(value);
 		}
+
+		private List<Stmt?> Block()
+        {
+			List<Stmt?> statements = new List<Stmt?>();
+
+			while (!Check(RIGHT_BRACE) && !IsAtEnd())
+				statements.Add(Declaration());
+
+			Consume(RIGHT_BRACE, "Expect '}' after block.");
+
+			return statements;
+        }
 
 		private Stmt ExpressionStatement()
 		{
@@ -251,10 +268,9 @@ namespace LoxNetCore
 
 		private void Synchronize()
 		{
-			Advance();
-
 			while(!IsAtEnd())
 			{
+				Advance();
 				if (Previous().Type == SEMICOLON) return;
 			}
 

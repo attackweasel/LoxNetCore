@@ -35,6 +35,9 @@ namespace LoxNetCore
                 case Stmt.Expression expression:
                     HandleExpression(expression);
                     break;
+                case Stmt.Block block:
+                    HandleBlock(block.Statements, new Env(_environment));
+                    break;
             }
         }
 
@@ -49,6 +52,24 @@ namespace LoxNetCore
         }
 
         public void HandleExpression(Stmt.Expression expression) => Evaluate(expression.Expr);
+
+        public void HandleBlock(List<Stmt?> statements, Env evironment)
+        {
+            Env previousEnvironment = _environment;
+
+            try
+            {
+                _environment = evironment;
+
+                foreach (var statement in statements)
+                    Execute(statement);
+            }
+
+            finally 
+            { 
+                _environment = previousEnvironment; 
+            }
+        }
 
         private object? Evaluate(Expr expression)
         {
