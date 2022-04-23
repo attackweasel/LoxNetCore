@@ -92,6 +92,7 @@ namespace LoxNetCore
                 Expr.Unary unary => HandleUnary(unary),
                 Expr.Binary binary => HandleBinary(binary),
                 Expr.Ternary ternary => HandleTernary(ternary),
+                Expr.Logical logical => HandleLogical(logical),
                 Expr.Assign assignment => HandleAssignment(assignment),
                 _ => throw new NotImplementedException()
             };
@@ -105,6 +106,22 @@ namespace LoxNetCore
         }
 
         private object? RetrieveVariable(Token name) => _environment.Get(name);
+
+        private object? HandleLogical(Expr.Logical expr)
+        {
+            Object? left = Evaluate(expr.Left);
+
+            if (expr.Op.Type is OR)
+            {
+                if (IsTruthy(left)) return left;
+            }
+            else
+            {
+                if (!IsTruthy(left)) return left;
+            }
+
+            return Evaluate(expr.Right);
+        }
 
         private object? HandleUnary(Expr.Unary unary)
         {

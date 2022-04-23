@@ -64,6 +64,20 @@ namespace LoxNetCore
 			}
 		}
 
+		public class Logical : Expr
+		{
+			public Expr Left { get; }
+			public Token Op { get; }
+			public Expr Right { get; }
+
+			public Logical(Expr left, Token op, Expr right)
+			{
+				Left = left;
+				Op = op;
+				Right = right;
+			}
+		}
+
 		public class Variable : Expr
 		{
 			public Token Name { get; }
