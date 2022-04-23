@@ -31,3 +31,8 @@ print a;
 print b;
 print c;
 
+var g = 1;
+{
+  var g = g + 2;
+  print g;
+}

@@ -16,14 +16,14 @@ namespace LoxNetCore
 
 		public class Ternary : Expr
 		{
-			public Expr BoolExpr { get; }
+			public Expr Condition { get; }
 			public Token Op { get; }
 			public Expr TrueExpr { get; }
 			public Expr FalseExpr { get; }
 
-			public Ternary(Expr boolExpr, Token op, Expr trueExpr, Expr falseExpr)
+			public Ternary(Expr condition, Token op, Expr trueExpr, Expr falseExpr)
 			{
-				BoolExpr = boolExpr;
+				Condition = condition;
 				Op = op;
 				TrueExpr = trueExpr;
 				FalseExpr = falseExpr;

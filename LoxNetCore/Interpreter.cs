@@ -26,6 +26,9 @@ namespace LoxNetCore
         {
             switch (statement)
             {
+                case Stmt.If ifStmt:
+                    HandleIfStatement(ifStmt);
+                    break;
                 case Stmt.Print printStmt:
                     HandlePrintStatement(printStmt);
                     break;
@@ -39,6 +42,14 @@ namespace LoxNetCore
                     HandleBlock(block.Statements, new Env(_environment));
                     break;
             }
+        }
+
+        private void HandleIfStatement(Stmt.If stmt)
+        {
+            if (IsTruthy(Evaluate(stmt.Condition)))
+                Execute(stmt.ThenBranch);
+            else if (stmt.ElseBranch is not null)
+                Execute(stmt.ElseBranch);
         }
 
         private void HandlePrintStatement(Stmt.Print stmt) =>
@@ -111,7 +122,7 @@ namespace LoxNetCore
 
         private object? HandleTernary(Expr.Ternary ternary)
         {
-            object? boolExpr = Evaluate(ternary.BoolExpr);
+            object? boolExpr = Evaluate(ternary.Condition);
 
             return IsTruthy(boolExpr) ? Evaluate(ternary.TrueExpr) : Evaluate(ternary.FalseExpr);
         }

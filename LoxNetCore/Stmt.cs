@@ -24,6 +24,20 @@ namespace LoxNetCore
 			}
 		}
 
+		public class If : Stmt
+		{
+			public Expr Condition { get; }
+			public Stmt ThenBranch { get; }
+			public Stmt? ElseBranch { get; }
+
+			public If(Expr condition, Stmt thenBranch, Stmt? elseBranch)
+			{
+				Condition = condition;
+				ThenBranch = thenBranch;
+				ElseBranch = elseBranch;
+			}
+		}
+
 		public class Print : Stmt
 		{
 			public Expr Expr { get; }
