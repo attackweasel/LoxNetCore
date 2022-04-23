@@ -9,7 +9,7 @@ string outputDir = args[0];
 DefineAst(outputDir, "Expr", new List<string>
 {
 	"Assign		: Token name, Expr value", 
-	"Ternary	: Expr boolExpr, Token op, Expr trueExpr, Expr falseExpr",
+	"Ternary	: Expr condition, Token op, Expr trueExpr, Expr falseExpr",
 	"Binary		: Expr left, Token op, Expr right",
 	"Grouping	: Expr expression",
 	"Literal	: object? value",
@@ -21,6 +21,7 @@ DefineAst(outputDir, "Stmt", new List<string>
 {
 	"Expression : Expr expression",
 	"Var		: Token name, Expr? initializer",
+	"If			: Expr condition, Stmt thenBranch, Stmt? elseBranch",
 	"Print		: Expr expression",
 	"Block		: List<Stmt?> statements"
 });
