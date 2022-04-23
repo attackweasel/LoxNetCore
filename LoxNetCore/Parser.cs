@@ -56,6 +56,7 @@ namespace LoxNetCore
         {
             if (Match(IF)) return IfStatement();
             if (Match(PRINT)) return PrintStatement();
+            if (Match(WHILE)) return WhileStatement();
             if (Match(LEFT_BRACE)) return new Stmt.Block(Block());
             return ExpressionStatement();
         }
@@ -72,6 +73,17 @@ namespace LoxNetCore
                 elseBranch = Statement();
 
             return new Stmt.If(condition, thenBranch, elseBranch);
+        }
+
+        private Stmt WhileStatement()
+        {
+            Consume(LEFT_PAREN, "Expect '(' after 'while'.");
+            Expr condition = Expression();
+            Consume(RIGHT_PAREN, "Expect ')' after while condition.");
+
+            Stmt body = Statement();
+
+            return new Stmt.While(condition, body);
         }
 
         private Stmt PrintStatement()

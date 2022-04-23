@@ -26,6 +26,9 @@ namespace LoxNetCore
         {
             switch (statement)
             {
+                case Stmt.While whileStmt:
+                    HandleWhileStatement(whileStmt);
+                    break;
                 case Stmt.If ifStmt:
                     HandleIfStatement(ifStmt);
                     break;
@@ -42,6 +45,12 @@ namespace LoxNetCore
                     HandleBlock(block.Statements, new Env(_environment));
                     break;
             }
+        }
+
+        private void HandleWhileStatement(Stmt.While stmt)
+        {
+            while (IsTruthy(Evaluate(stmt.Condition)))
+                Execute(stmt.Body);
         }
 
         private void HandleIfStatement(Stmt.If stmt)

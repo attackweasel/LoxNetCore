@@ -48,6 +48,18 @@ namespace LoxNetCore
 			}
 		}
 
+		public class While : Stmt
+		{
+			public Expr Condition { get; }
+			public Stmt Body { get; }
+
+			public While(Expr condition, Stmt body)
+			{
+				Condition = condition;
+				Body = body;
+			}
+		}
+
 		public class Block : Stmt
 		{
 			public List<Stmt?> Statements { get; }
