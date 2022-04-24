@@ -54,11 +54,54 @@ namespace LoxNetCore
 
         private Stmt Statement()
         {
+            if (Match(FOR)) return ForStatement();
             if (Match(IF)) return IfStatement();
             if (Match(PRINT)) return PrintStatement();
             if (Match(WHILE)) return WhileStatement();
             if (Match(LEFT_BRACE)) return new Stmt.Block(Block());
             return ExpressionStatement();
+        }
+
+        private Stmt ForStatement()
+        {
+            Consume(LEFT_PAREN, "Expect '(' after 'for'.");
+
+            Stmt? initializer;
+            if (Match(SEMICOLON))
+                initializer = null;
+            else if (Match(VAR))
+                initializer = VarDeclaration();
+            else initializer = ExpressionStatement();
+
+            Expr? condition = null;
+            if (!Check(SEMICOLON))
+                condition = Expression();
+            Consume(SEMICOLON, "Expect ';' after loop condition.");
+
+            Expr? increment = null;
+            if (!Check(RIGHT_PAREN))
+                increment = Expression();
+            Consume(RIGHT_PAREN, "Expect ')' after for clauses.");
+
+            Stmt body = Statement();
+
+            if (increment is not null)
+            {
+                body = new Stmt.Block(
+                    new List<Stmt?>
+                    {
+                        body,
+                        new Stmt.Expression(increment)
+                    });
+            }
+
+            if (condition is null) condition = new Expr.Literal(true);
+            body = new Stmt.While(condition, body);
+
+            if (initializer is not null)
+                body = new Stmt.Block(new List<Stmt?> { initializer, body });
+
+            return body;
         }
 
         private Stmt IfStatement()
