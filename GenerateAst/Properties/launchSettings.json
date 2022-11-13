@@ -2,7 +2,7 @@
   "profiles": {
     "GenerateAst": {
       "commandName": "Project",
-      "commandLineArgs": "\"C:/Users/jkroh/source/repos/LoxNetCore/LoxNetCore\""
+      "commandLineArgs": "\"C:/Users/jkroh/source/repos/attackweasel/LoxNetCore/LoxNetCore\""
     }
   }
 }
