@@ -44,6 +44,20 @@ namespace LoxNetCore
 			}
 		}
 
+		public class Call : Expr
+		{
+			public Expr Callee { get; }
+			public Token Paren { get; }
+			public List<Expr> Arguments { get; }
+
+			public Call(Expr callee, Token paren, List<Expr> arguments)
+			{
+				Callee = callee;
+				Paren = paren;
+				Arguments = arguments;
+			}
+		}
+
 		public class Grouping : Expr
 		{
 			public Expr Expr { get; }
